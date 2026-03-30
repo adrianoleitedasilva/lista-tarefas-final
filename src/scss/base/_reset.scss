@@ -7,6 +7,12 @@ body {
   height: 100%;
 }
 
+body {
+  margin: 0;
+  background: var(--black);
+  font-family: Roboto, "Helvetica neue", sans-serif;
+}
+
 h1 {
   font-size: 22px;
 }

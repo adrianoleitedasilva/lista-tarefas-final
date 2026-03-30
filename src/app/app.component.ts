@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  template: `Adri<router-outlet></router-outlet>ano`,
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent {
   title = 'lista-tarefas';
