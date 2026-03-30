@@ -4,16 +4,18 @@ import {
   ElementRef,
   EventEmitter,
   inject,
+  Input,
   Output,
   ViewChild,
 } from '@angular/core';
 import { timestamp } from 'rxjs';
 import { IListItems } from '../../interface/IListItems.interface';
+import { JsonPipe, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-input-add-item',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './input-add-item.component.html',
   styleUrl: './input-add-item.component.scss',
 })
@@ -22,8 +24,8 @@ export class InputAddItemComponent {
 
   @ViewChild('inputText') public inputText!: ElementRef;
 
-  @Output() public outputListItems = new EventEmitter<IListItems>();
-
+  @Input({ required: true }) public inputListItems: IListItems[] = [];
+  @Output() public outputListItem = new EventEmitter<IListItems>();
   public focusAddItem(value: string) {
     if (value) {
       this.#cdr.detectChanges();
@@ -33,7 +35,7 @@ export class InputAddItemComponent {
       const timestamp = dataAtual.getTime();
       const id = `ID ${timestamp}`;
 
-      this.outputListItems.emit({
+      this.outputListItem.emit({
         id,
         checked: false,
         value,

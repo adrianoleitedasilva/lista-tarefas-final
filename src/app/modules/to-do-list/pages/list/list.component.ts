@@ -2,19 +2,22 @@ import { Component, signal } from '@angular/core';
 
 // Components
 import { InputAddItemComponent } from '../../components/input-add-item/input-add-item.component';
+import { InputListItemComponent } from '../../components/input-list-item/input-list-item.component';
+
+// Interface
 import { IListItems } from '../../interface/IListItems.interface';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [InputAddItemComponent],
+  imports: [InputAddItemComponent, InputListItemComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
 export class ListComponent {
   public addItem = signal(true);
 
-  #setListItems = signal<IListItems[]>([this.#parseItems()]);
+  #setListItems = signal<IListItems[]>(this.#parseItems());
   getListItems = this.#setListItems.asReadonly();
 
   #parseItems() {
@@ -22,6 +25,29 @@ export class ListComponent {
   }
 
   public getInputAndAddItem(value: IListItems) {
-    localStorage.setItem('@my-list', JSON.stringify([value]));
+    localStorage.setItem(
+      '@my-list',
+      JSON.stringify([...this.#setListItems(), value]),
+    );
+
+    return this.#setListItems.set(this.#parseItems());
+  }
+
+  public listItemsStage(value: 'pending' | 'completed') {
+    return this.getListItems().filter((res: IListItems) => {
+      if (value === 'pending') {
+        return !res.checked;
+      }
+
+      if (value === 'completed') {
+        return !res.checked;
+      }
+
+      return res;
+    });
+  }
+  public deletaAllItems() {
+    localStorage.removeItem('@my-list');
+    return this.#setListItems.set(this.#parseItems());
   }
 }
