@@ -3,14 +3,15 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  inject,
   Input,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
-import { timestamp } from 'rxjs';
+
+// Interfaces
+import { NgClass } from '@angular/common';
 import { IListItems } from '../../interface/IListItems.interface';
-import { JsonPipe, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-input-add-item',
@@ -25,17 +26,18 @@ export class InputAddItemComponent {
   @ViewChild('inputText') public inputText!: ElementRef;
 
   @Input({ required: true }) public inputListItems: IListItems[] = [];
-  @Output() public outputListItem = new EventEmitter<IListItems>();
-  public focusAddItem(value: string) {
+
+  @Output() public outputAddListItem = new EventEmitter<IListItems>();
+  public focusAndAddItem(value: string) {
     if (value) {
       this.#cdr.detectChanges();
       this.inputText.nativeElement.value = '';
 
-      const dataAtual = new Date();
-      const timestamp = dataAtual.getTime();
+      const currentDate = new Date();
+      const timestamp = currentDate.getTime();
       const id = `ID ${timestamp}`;
 
-      this.outputListItem.emit({
+      this.outputAddListItem.emit({
         id,
         checked: false,
         value,
